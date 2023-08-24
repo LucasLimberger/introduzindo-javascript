@@ -1,0 +1,395 @@
+/* cores, modo claro e escuro */
+
+:root:not(.dark) {
+    --text-primary: hsl(0 0% 5%);
+    --background-primary: hsl(0 0% 97%);
+    --background-secondary: hsl(0 0% 87%);
+    --background-tertiary: hsl(0 0% 80%);
+    --background-accent: hsl(240 100% 75%);
+    --button-border-color: hsl(0 0% 50%);
+    --button-disabled: hsl(0 70% 65%);
+    --selected-outline-color: hsl(240 50% 50%);
+    --sidebar-current: var(--background-accent);
+    --sidebar-complete: hsl(140 75% 60%);
+    --sidebar-incomplete: hsl(50 90% 65%);
+    --nav-menu-background: hsla(0 0% 0% / 90%);
+
+    --code-comment: hsl(0 0% 50%);
+    --code-string: hsl(15 100% 40%);
+    --code-keyword: hsl(300 100% 40%);
+    --code-keyword2: hsl(240, 90%, 35%);
+    --code-function: hsl(60 100% 30%);
+    --text-input: hsl(110, 100%, 35%);
+    --answer-color-correct: var(--sidebar-complete);
+    --answer-color-incorrect: hsl(0 70% 65%);
+}
+:root.dark {
+    --text-primary: hsl(0 0% 90%);
+    --background-primary: hsl(0 0% 13%);
+    --background-secondary: hsl(0 0% 20%);
+    --background-tertiary: hsl(0 0% 25%);
+    --background-accent: hsl(240, 50%, 35%);
+    --button-border-color: hsl(0 0% 50%);
+    --button-disabled: hsl(0 60% 35%);
+    --selected-outline-color: hsl(240 50% 70%);
+    --sidebar-current: var(--background-accent);
+    --sidebar-complete: hsl(140 80% 30%);
+    --sidebar-incomplete: hsl(60 80% 35%);
+    --nav-menu-background: hsla(0 0% 0% / 90%);
+
+    --code-comment: hsl(0 0% 60%);
+    --code-string: hsl(20 70% 65%);
+    --code-keyword: hsl(300 70% 60%);
+    --code-keyword2: hsl(240 70% 70%);
+    --code-function: hsl(60 80% 70%);
+    --text-input: hsl(60, 100%, 50%);
+    --answer-color-correct: var(--sidebar-complete);
+    --answer-color-incorrect: hsl(0 60% 35%);
+}
+
+:root {
+    --font-main: Verdana, Arial, sans-serif;
+    --font-header: cursive, sans-serif;
+    --font-code: monospace;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    :root {
+        scroll-behavior: smooth;
+    }
+}
+
+/* layout principal */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root,
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+}
+
+.main-wrapper {
+    position: relative;
+    max-width: 88rem;
+    padding: 2rem 4rem 2rem 2rem;
+    margin-inline: auto;
+    display: grid;
+    grid-template-areas: "sidebar main";
+    grid-template-columns: 1fr 4fr;
+    column-gap: 4rem;
+}
+@media (max-width: 58rem) {
+    /* 58rem = 928px */
+    .main-wrapper {
+        grid-template-areas:
+            "main"
+            "sidebar";
+        grid-template-columns: 1fr;
+        row-gap: 6rem;
+    }
+}
+
+.main-content {
+    grid-area: main;
+    width: 100%;
+    min-height: 100%;
+    margin-inline: auto;
+
+    background-color: var(--background-primary);
+}
+
+.article {
+    margin: 2rem 0 2.5rem 0;
+}
+
+.separator {
+    height: 0.25rem;
+    margin-block: 1rem;
+
+    background-color: var(--background-tertiary);
+}
+
+.button-grid {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-between;
+}
+
+/* botões de navegação */
+
+button:not(:disabled):hover,
+button:not(:disabled):focus {
+    outline: var(--selected-outline-color) solid 4px;
+}
+
+button {
+    margin: 0;
+    padding: 0.5rem;
+
+    background-color: var(--background-accent);
+    border-radius: 0.5rem;
+    border: none;
+    outline: 1px solid var(--button-border-color);
+    cursor: pointer;
+    color: inherit;
+    font-size: inherit;
+}
+button:disabled {
+    cursor: not-allowed;
+}
+.next-button,
+.previous-button {
+    min-width: 4rem;
+
+    font-family: var(--font-main);
+    font-size: 1.125rem;
+}
+.next-button:disabled,
+.previous-button:disabled {
+    background-color: var(--button-disabled);
+}
+
+/* barra lateral */
+
+.sidebar {
+    grid-area: sidebar;
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+    padding-bottom: 1rem;
+    /* max-width: 20rem; */
+}
+
+.menu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.menu button {
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 0.3rem;
+    background-color: var(--background-tertiary);
+}
+
+.menu svg {
+    fill: var(--text-primary);
+}
+
+.nav-header {
+    display: block;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+
+    font-family: var(--font-header);
+    font-size: 1.5rem;
+}
+.nav-list {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    row-gap: 0.5rem;
+    list-style-type: none;
+}
+
+.sidebar-button {
+    width: 100%;
+    padding: 0.25rem 0.25rem 0.25rem 1rem;
+
+    background-color: var(--background-secondary);
+    border-radius: 0.25rem;
+    outline: none;
+    text-align: left;
+}
+.sidebar-button.complete {
+    background-color: var(--sidebar-complete);
+}
+.sidebar-button.incomplete {
+    background-color: var(--sidebar-incomplete);
+}
+.sidebar-button.current {
+    background-color: var(--sidebar-current);
+    font-style: italic;
+}
+
+.nav-menu {
+    position: fixed;
+    bottom: 0rem;
+    width: calc((100% - 6rem) * 0.75);
+    max-height: 100%;
+    overflow-y: scroll;
+    margin: 0 -2rem;
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    z-index: 1;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 2rem;
+
+    background-color: var(--nav-menu-background);
+    border-radius: 1rem 1rem 0 0;
+    list-style: none;
+}
+@media (max-width: 58rem) {
+    .nav-menu {
+        width: 100%;
+        border-radius: 0;
+    }
+}
+.nav-menu.hidden {
+    display: none;
+    opacity: 0;
+}
+.nav-menu .nav-header {
+    margin-top: 2.5rem;
+}
+
+body:has(.nav-menu:not(.hidden)) {
+    overflow: hidden;
+}
+
+/* conteúdo principal */
+
+h1,
+h2,
+h3,
+p,
+pre {
+    margin-top: 1em;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-header);
+    font-weight: bold;
+}
+h1 {
+    margin-bottom: -1rem;
+    font-size: 2.5rem;
+}
+h2 {
+    font-size: 2rem;
+    font-style: italic;
+}
+h3 {
+    font-size: 1.4rem;
+}
+p {
+    font-size: 1rem;
+}
+
+.code-wrapper {
+    padding: 0.5rem 1rem;
+    background-color: var(--background-secondary);
+    border-radius: 0.3rem;
+    font-size: 0.9rem;
+    font-family: var(--font-code);
+    tab-size: 4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: hidden;
+}
+code {
+    font-family: var(--font-code);
+}
+.inline-code {
+    padding-inline: 0.25rem;
+    background-color: var(--background-secondary);
+    border-radius: 0.15rem;
+}
+.code-comment {
+    color: var(--code-comment);
+}
+.code-string {
+    color: var(--code-string);
+}
+.code-keyword {
+    color: var(--code-keyword);
+}
+.code-keyword-value {
+    color: var(--code-keyword2);
+}
+.code-function {
+    color: var(--code-function);
+}
+
+.in-out {
+    margin-block: 1rem;
+    display: grid;
+    grid-template-columns: 2.25fr 1fr;
+    column-gap: 2rem;
+}
+.code-wrapper > pre {
+    margin: 0;
+    white-space: inherit;
+}
+.in-out input {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.25rem;
+
+    background-color: var(--background-tertiary);
+    border-radius: 0.3rem;
+    color: var(--text-input);
+    font-weight: bold;
+    font-style: italic;
+    font-family: var(--font-code);
+}
+.insert-input {
+    font-weight: bold;
+    font-style: italic;
+    color: var(--text-input);
+}
+output {
+    font-style: italic;
+    line-height: 1.5;
+}
+
+.answer-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1rem;
+}
+.answer {
+    /* button */
+    padding-inline: 1rem;
+
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+    text-align: left;
+
+    animation-duration: 500ms;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+@keyframes bgColorShift {
+    from {
+        background-color: var(--background-secondary);
+    }
+}
+.correct {
+    animation-name: bgColorShift;
+    background-color: var(--answer-color-correct);
+}
+.incorrect {
+    animation-name: bgColorShift;
+    background-color: var(--answer-color-incorrect);
+}
