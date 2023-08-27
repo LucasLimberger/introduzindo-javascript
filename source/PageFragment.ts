@@ -103,7 +103,7 @@ class CodeBlock extends PageFragment {
         codeWrapper.append(pre);
         const output = document.createElement("output");
         output.className = "code-wrapper";
-        output.innerText = this.outputContent;
+        output.append(createCodeElement(this.outputContent));
 
         element.append(codeWrapper);
         element.append(output);
@@ -174,13 +174,12 @@ class InputToOutput extends PageFragment {
         } else if (typeof outputValue === "string") {
             outputValue = `"${outputValue}"`;
         }
-        this._outputElement!.value = String(outputValue);
+        this._outputElement!.replaceChildren(createCodeElement(String(outputValue)));
     }
 }
 
 class Question extends PageFragment {
     constructor(
-        public question: string,
         public answers: string[],
         public correctAnswer: number,
         public explanation: string,
@@ -196,11 +195,6 @@ class Question extends PageFragment {
 
     _buildHTML() {
         const element = document.createElement("div");
-        const questionHeader = document.createElement("p");
-        questionHeader.className = "question";
-        questionHeader.innerHTML = this.question;
-        element.append(questionHeader);
-
         this._answerListElement = document.createElement("div");
         this._answerListElement.className = "answer-list";
         this._answerListElement.addEventListener("click", this._onClick);
@@ -211,9 +205,6 @@ class Question extends PageFragment {
             this._answerListElement.append(button);
         }
         element.append(this._answerListElement);
-
-        this._explanationElement = document.createElement("p");
-        this._explanationElement.innerHTML = this.explanation;
 
         element.querySelectorAll("code").forEach(code => {
             const newElement = createCodeElement(code.innerText);
@@ -254,14 +245,21 @@ class Question extends PageFragment {
         }
     }
 
-    private _handleCorrectAnswer(element: HTMLElement) {
-        element.classList.add("correct");
+    private _handleCorrectAnswer(answerElement: HTMLElement) {
+        answerElement.classList.add("correct");
         this._isSolved = true;
-        this._html!.append(this._explanationElement!);
+        this._explanationElement = document.createElement("p");
+        this._explanationElement.innerHTML = this.explanation;
+        this._explanationElement.querySelectorAll("code").forEach(code => {
+            const newElement = createCodeElement(code.innerText);
+            newElement.className = "inline-code";
+            code.replaceWith(newElement);
+        });
+        this._html!.append(this._explanationElement);
     }
 
-    private _handleWrongAnswer(element: HTMLElement) {
-        element.classList.add("incorrect");
+    private _handleWrongAnswer(answerElement: HTMLElement) {
+        answerElement.classList.add("incorrect");
     }
 
     markAsSolved() {

@@ -29,7 +29,11 @@ setup();
 loadFromLocalStorage();
 
 function setup() {
-    if (window?.matchMedia("(prefers-color-scheme: dark)")) {
+    if (localStorage.getItem("theme") === null) {
+        const darkMode = window?.matchMedia("(prefers-color-scheme: dark)").matches ?? true;
+        localStorage.setItem("theme", darkMode ? "dark" : "light");
+    }
+    if (localStorage.getItem("theme") === "dark") {
         rootElement.classList.add("dark");
     }
 
@@ -66,7 +70,10 @@ function setup() {
         });
     }
 
-    themeButton.addEventListener("click", event => rootElement.classList.toggle("dark"));
+    themeButton.addEventListener("click", event => {
+        rootElement.classList.toggle("dark");
+        localStorage.setItem("theme", rootElement.classList.contains("dark") ? "dark" : "light");
+    });
 
     sidebarListElement.addEventListener("click", event => {
         if (event.target === null) return;
@@ -104,6 +111,12 @@ function setup() {
             sublist.append(...createNavList(i));
             li.append(sublist);
             navMenuList.append(li);
+        }
+    });
+
+    document.body.addEventListener("keydown", event => {
+        if (event.code === "Escape" && navMenuList.childElementCount > 0) {
+            clearNavMenu();
         }
     });
 

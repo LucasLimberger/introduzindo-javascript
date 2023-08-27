@@ -87,7 +87,7 @@ class CodeBlock extends PageFragment {
         codeWrapper.append(pre);
         const output = document.createElement("output");
         output.className = "code-wrapper";
-        output.innerText = this.outputContent;
+        output.append(createCodeElement(this.outputContent));
         element.append(codeWrapper);
         element.append(output);
         return element;
@@ -144,14 +144,13 @@ class InputToOutput extends PageFragment {
         else if (typeof outputValue === "string") {
             outputValue = `"${outputValue}"`;
         }
-        this._outputElement.value = String(outputValue);
+        this._outputElement.replaceChildren(createCodeElement(String(outputValue)));
     }
 }
 InputToOutput._id = 0;
 class Question extends PageFragment {
-    constructor(question, answers, correctAnswer, explanation, options = {}) {
+    constructor(answers, correctAnswer, explanation, options = {}) {
         super(options);
-        this.question = question;
         this.answers = answers;
         this.correctAnswer = correctAnswer;
         this.explanation = explanation;
@@ -162,10 +161,6 @@ class Question extends PageFragment {
     }
     _buildHTML() {
         const element = document.createElement("div");
-        const questionHeader = document.createElement("p");
-        questionHeader.className = "question";
-        questionHeader.innerHTML = this.question;
-        element.append(questionHeader);
         this._answerListElement = document.createElement("div");
         this._answerListElement.className = "answer-list";
         this._answerListElement.addEventListener("click", this._onClick);
@@ -176,8 +171,6 @@ class Question extends PageFragment {
             this._answerListElement.append(button);
         }
         element.append(this._answerListElement);
-        this._explanationElement = document.createElement("p");
-        this._explanationElement.innerHTML = this.explanation;
         element.querySelectorAll("code").forEach(code => {
             const newElement = createCodeElement(code.innerText);
             newElement.className = "inline-code";
@@ -213,13 +206,20 @@ class Question extends PageFragment {
             this._handleWrongAnswer(source);
         }
     }
-    _handleCorrectAnswer(element) {
-        element.classList.add("correct");
+    _handleCorrectAnswer(answerElement) {
+        answerElement.classList.add("correct");
         this._isSolved = true;
+        this._explanationElement = document.createElement("p");
+        this._explanationElement.innerHTML = this.explanation;
+        this._explanationElement.querySelectorAll("code").forEach(code => {
+            const newElement = createCodeElement(code.innerText);
+            newElement.className = "inline-code";
+            code.replaceWith(newElement);
+        });
         this._html.append(this._explanationElement);
     }
-    _handleWrongAnswer(element) {
-        element.classList.add("incorrect");
+    _handleWrongAnswer(answerElement) {
+        answerElement.classList.add("incorrect");
     }
     markAsSolved() {
         if (this._answerListElement === null)

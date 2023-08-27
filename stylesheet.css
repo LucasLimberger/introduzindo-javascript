@@ -2,6 +2,7 @@
 
 :root:not(.dark) {
     --text-primary: hsl(0 0% 5%);
+    --text-highlight: hsl(200 100% 30%);
     --background-primary: hsl(0 0% 97%);
     --background-secondary: hsl(0 0% 87%);
     --background-tertiary: hsl(0 0% 80%);
@@ -19,12 +20,14 @@
     --code-keyword: hsl(300 100% 40%);
     --code-keyword2: hsl(240, 90%, 35%);
     --code-function: hsl(60 100% 30%);
-    --text-input: hsl(110, 100%, 35%);
+    --code-number: hsl(160 100% 30%);
+    --text-input: hsl(110, 100%, 30%);
     --answer-color-correct: var(--sidebar-complete);
     --answer-color-incorrect: hsl(0 70% 65%);
 }
 :root.dark {
     --text-primary: hsl(0 0% 90%);
+    --text-highlight: hsl(200 100% 50%);
     --background-primary: hsl(0 0% 13%);
     --background-secondary: hsl(0 0% 20%);
     --background-tertiary: hsl(0 0% 25%);
@@ -42,6 +45,7 @@
     --code-keyword: hsl(300 70% 60%);
     --code-keyword2: hsl(240 70% 70%);
     --code-function: hsl(60 80% 70%);
+    --code-number: hsl(160 100% 60%);
     --text-input: hsl(60, 100%, 50%);
     --answer-color-correct: var(--sidebar-complete);
     --answer-color-incorrect: hsl(0 60% 35%);
@@ -94,11 +98,12 @@ body {
 @media (max-width: 58rem) {
     /* 58rem = 928px */
     .main-wrapper {
+        padding-inline: min(7vw, 4rem);
         grid-template-areas:
             "main"
             "sidebar";
         grid-template-columns: 1fr;
-        row-gap: 6rem;
+        row-gap: 4rem;
     }
 }
 
@@ -227,14 +232,24 @@ button:disabled {
     font-style: italic;
 }
 
+@media (max-width: 58rem) {
+    .sidebar {
+        display: grid;
+    }
+    .sidebar-buttons-wrapper {
+        grid-row: 2;
+    }
+}
+
 .nav-menu {
     position: fixed;
-    bottom: 0rem;
-    width: calc((100% - 6rem) * 0.75);
+    bottom: 0;
+    left: 2rem;
+    right: 2rem;
     max-height: 100%;
-    overflow-y: scroll;
-    margin: 0 -2rem;
-    padding: 0 1.5rem 1.5rem 1.5rem;
+    /* overflow-y: scroll; */
+    margin: 0;
+    padding: 0 2rem 2rem 2rem;
     z-index: 1;
 
     display: grid;
@@ -247,7 +262,8 @@ button:disabled {
 }
 @media (max-width: 58rem) {
     .nav-menu {
-        width: 100%;
+        left: 0;
+        right: 0;
         border-radius: 0;
     }
 }
@@ -259,9 +275,9 @@ button:disabled {
     margin-top: 2.5rem;
 }
 
-body:has(.nav-menu:not(.hidden)) {
+/* body:has(.nav-menu:not(.hidden)) {
     overflow: hidden;
-}
+} */
 
 /* conteúdo principal */
 
@@ -294,6 +310,9 @@ h3 {
 }
 p {
     font-size: 1rem;
+}
+b {
+    color: var(--text-highlight);
 }
 
 .code-wrapper {
@@ -329,6 +348,9 @@ code {
 }
 .code-function {
     color: var(--code-function);
+}
+.code-number {
+    color: var(--code-number);
 }
 
 .in-out {

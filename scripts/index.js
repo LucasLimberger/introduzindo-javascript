@@ -23,7 +23,12 @@ let isQuestionDone = true;
 setup();
 loadFromLocalStorage();
 function setup() {
-    if (window === null || window === void 0 ? void 0 : window.matchMedia("(prefers-color-scheme: dark)")) {
+    var _a;
+    if (localStorage.getItem("theme") === null) {
+        const darkMode = (_a = window === null || window === void 0 ? void 0 : window.matchMedia("(prefers-color-scheme: dark)").matches) !== null && _a !== void 0 ? _a : true;
+        localStorage.setItem("theme", darkMode ? "dark" : "light");
+    }
+    if (localStorage.getItem("theme") === "dark") {
         rootElement.classList.add("dark");
     }
     articleElement.addEventListener("custom:questionanswered", event => {
@@ -57,7 +62,10 @@ function setup() {
             }
         });
     }
-    themeButton.addEventListener("click", event => rootElement.classList.toggle("dark"));
+    themeButton.addEventListener("click", event => {
+        rootElement.classList.toggle("dark");
+        localStorage.setItem("theme", rootElement.classList.contains("dark") ? "dark" : "light");
+    });
     sidebarListElement.addEventListener("click", event => {
         if (event.target === null)
             return;
@@ -93,6 +101,11 @@ function setup() {
             sublist.append(...createNavList(i));
             li.append(sublist);
             navMenuList.append(li);
+        }
+    });
+    document.body.addEventListener("keydown", event => {
+        if (event.code === "Escape" && navMenuList.childElementCount > 0) {
+            clearNavMenu();
         }
     });
     navMenuList.addEventListener("click", event => {
