@@ -1,7 +1,7 @@
 export default function createCodeElement(content: string) {
     const nodes = [content]
-        .flatMap(node => applyRule(node, regexpComment, "code-comment"))
-        .flatMap(node => applyRule(node, regexpString, "code-string"))
+        .flatMap(node => applyRule(node, regexpComments, "code-comment"))
+        .flatMap(node => applyRule(node, regexpStrings, "code-string"))
         .flatMap(node => applyRule(node, regexpSpecialValues, "code-keyword-value"))
         .flatMap(node => applyRule(node, regexpKeywords, "code-keyword"))
         .flatMap(node => applyRule(node, regexpFunctions, "code-function"))
@@ -29,10 +29,10 @@ function applyRule(content: string | HTMLElement, regexp: RegExp, className: str
     return nodes;
 }
 
-const regexpComment = /\/\/.*$|\/\*.*?\*\//gm;
-const regexpString = /".*?"|'.*?'|`[^\$]*?`|`[^]*?\$\{|\}[^]*?(\$\{|`)/g;
+const regexpComments = /\/\/.*$|\/\*.*?\*\//gm;
+const regexpStrings = /".*?"|'.*?'|`[^\$]*?`|`[^]*?\$\{|\}[^]*?(\$\{|`)/g;
 const regexpSpecialValues = /(?<!\w)(true|false|null|undefined|NaN)(?!\w)/g;
 const regexpKeywords =
     /(?<!\w)(as|async|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|export|extends|finally|for|from|function|get|if|import|in|instanceof|let|new|of|return|set|static|super|switch|this|throw|try|typeof|using|var|void|while|with|yield)(?!\w)/g;
 const regexpFunctions = /\w+?(?= ?\()/g;
-const regexpNumbers = /\d+(.\d+)?(e[+-]\d+)?/g;
+const regexpNumbers = /(?<![A-Za-z_])\d+(.\d+)?(e[+-]\d+)?(?![A-Za-z_])/g;

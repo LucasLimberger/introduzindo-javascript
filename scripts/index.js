@@ -5,12 +5,11 @@ const articleElement = document.querySelector("article");
 const titleElement = document.querySelector("title");
 const h1Element = document.querySelector("h1");
 const h2Element = document.querySelector("h2");
-// const sidebarElement: HTMLElement = document.querySelector("#sidebar")!;
 const sidebarHeaderElement = document.querySelector("#sidebar-nav-header");
 const sidebarListElement = document.querySelector("#sidebar-list");
 const themeButton = document.querySelector("#theme-button");
 const navMenuButton = document.querySelector("#nav-menu-button");
-const navMenuList = document.querySelector("#nav-menu");
+const navMenuListElement = document.querySelector("#nav-menu");
 const nextButtons = Array.from(document.querySelectorAll(".next-button"));
 const previousButtons = Array.from(document.querySelectorAll(".previous-button"));
 let loadedTopic;
@@ -20,6 +19,8 @@ let loadedPageIndex = -1;
 let furthestTopic = 0;
 let furthestPage = 0;
 let isQuestionDone = true;
+console.clear();
+console.log("Você achou o console do seu navegador. Pode escrever código aqui para o navegador executar.");
 setup();
 loadFromLocalStorage();
 function setup() {
@@ -84,11 +85,11 @@ function setup() {
         loadPage(loadedTopicIndex, itemIndex);
     });
     navMenuButton.addEventListener("click", event => {
-        if (navMenuList.childElementCount > 0) {
+        if (navMenuListElement.childElementCount > 0) {
             clearNavMenu();
             return;
         }
-        navMenuList.classList.remove("hidden");
+        navMenuListElement.classList.remove("hidden");
         for (let i = 0; i <= furthestTopic; i++) {
             const li = document.createElement("li");
             const sublist = document.createElement("ol");
@@ -100,15 +101,15 @@ function setup() {
             sublist.append(header);
             sublist.append(...createNavList(i));
             li.append(sublist);
-            navMenuList.append(li);
+            navMenuListElement.append(li);
         }
     });
     document.body.addEventListener("keydown", event => {
-        if (event.code === "Escape" && navMenuList.childElementCount > 0) {
+        if (event.code === "Escape" && navMenuListElement.childElementCount > 0) {
             clearNavMenu();
         }
     });
-    navMenuList.addEventListener("click", event => {
+    navMenuListElement.addEventListener("click", event => {
         if (event.target === null)
             return;
         const source = event.target;
@@ -130,8 +131,8 @@ function setup() {
     });
 }
 function clearNavMenu() {
-    navMenuList.replaceChildren();
-    navMenuList.classList.add("hidden");
+    navMenuListElement.replaceChildren();
+    navMenuListElement.classList.add("hidden");
 }
 function saveToLocalStorage() {
     localStorage.setItem("topic", loadedTopicIndex.toString());

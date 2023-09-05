@@ -1,19 +1,15 @@
 import createCodeElement from "./codeHighlighting.js";
 export { PageFragment, Paragraph, Heading, Img, CodeBlock, InputToOutput, Question };
 class PageFragment {
-    constructor({ id = undefined, className = undefined }) {
+    constructor(id = null) {
         this._html = null;
         this.id = id;
-        this.className = className;
     }
     getHTML() {
         if (this._html === null) {
             this._html = this._buildHTML();
-            if (this.id !== undefined) {
+            if (this.id !== null) {
                 this._html.id = this.id;
-            }
-            if (this.className !== undefined) {
-                this._html.classList.add(...this.className.split(" "));
             }
         }
         return this._html;
@@ -28,8 +24,8 @@ class PageFragment {
     }
 }
 class Paragraph extends PageFragment {
-    constructor(content, options = {}) {
-        super(options);
+    constructor(content, id) {
+        super(id);
         this.content = content;
     }
     _buildHTML() {
@@ -44,8 +40,8 @@ class Paragraph extends PageFragment {
     }
 }
 class Heading extends PageFragment {
-    constructor(content, options = {}) {
-        super(options);
+    constructor(content, id) {
+        super(id);
         this.content = content;
     }
     _buildHTML() {
@@ -55,8 +51,8 @@ class Heading extends PageFragment {
     }
 }
 class Img extends PageFragment {
-    constructor(source, alt, options = {}) {
-        super(options);
+    constructor(source, alt, id) {
+        super(id);
         this.source = source;
         this.alt = alt;
     }
@@ -68,8 +64,8 @@ class Img extends PageFragment {
     }
 }
 class CodeBlock extends PageFragment {
-    constructor(content, outputContent = null, options = {}) {
-        super(options);
+    constructor(content, outputContent = null, id) {
+        super(id);
         this.content = content;
         this.outputContent = outputContent;
     }
@@ -94,8 +90,8 @@ class CodeBlock extends PageFragment {
     }
 }
 class InputToOutput extends PageFragment {
-    constructor(content, inputType, mapFunction, options = {}) {
-        super(options);
+    constructor(content, inputType, mapFunction, id) {
+        super(id);
         this.content = content;
         this.inputType = inputType;
         this.mapFunction = mapFunction;
@@ -149,8 +145,8 @@ class InputToOutput extends PageFragment {
 }
 InputToOutput._id = 0;
 class Question extends PageFragment {
-    constructor(answers, correctAnswer, explanation, options = {}) {
-        super(options);
+    constructor(answers, correctAnswer, explanation, id) {
+        super(id);
         this.answers = answers;
         this.correctAnswer = correctAnswer;
         this.explanation = explanation;

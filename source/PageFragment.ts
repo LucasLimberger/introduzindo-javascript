@@ -1,15 +1,11 @@
 import createCodeElement from "./codeHighlighting.js";
 export { PageFragment, Paragraph, Heading, Img, CodeBlock, InputToOutput, Question };
 
-type IdAndClass = { id?: string; className?: string };
-
 abstract class PageFragment {
-    constructor({ id = undefined, className = undefined }: IdAndClass) {
+    constructor(id: string | null = null) {
         this.id = id;
-        this.className = className;
     }
-    id: string | undefined;
-    className: string | undefined;
+    id: string | null;
 
     protected _html: HTMLElement | null = null;
 
@@ -18,11 +14,8 @@ abstract class PageFragment {
     getHTML(): HTMLElement {
         if (this._html === null) {
             this._html = this._buildHTML();
-            if (this.id !== undefined) {
+            if (this.id !== null) {
                 this._html.id = this.id;
-            }
-            if (this.className !== undefined) {
-                this._html.classList.add(...this.className.split(" "));
             }
         }
         return this._html;
@@ -39,8 +32,8 @@ abstract class PageFragment {
 }
 
 class Paragraph extends PageFragment {
-    constructor(public content: string, options: IdAndClass = {}) {
-        super(options);
+    constructor(public content: string, id?: string) {
+        super(id);
     }
     _buildHTML() {
         const element = document.createElement("p");
@@ -55,8 +48,8 @@ class Paragraph extends PageFragment {
 }
 
 class Heading extends PageFragment {
-    constructor(public content: string, options: IdAndClass = {}) {
-        super(options);
+    constructor(public content: string, id?: string) {
+        super(id);
     }
     _buildHTML() {
         const element = document.createElement("h3");
@@ -66,8 +59,8 @@ class Heading extends PageFragment {
 }
 
 class Img extends PageFragment {
-    constructor(public source: string, public alt: string, options: IdAndClass = {}) {
-        super(options);
+    constructor(public source: string, public alt: string, id?: string) {
+        super(id);
     }
     _buildHTML() {
         const element = document.createElement("img");
@@ -78,12 +71,8 @@ class Img extends PageFragment {
 }
 
 class CodeBlock extends PageFragment {
-    constructor(
-        public content: string,
-        public outputContent: string | null = null,
-        options: IdAndClass = {}
-    ) {
-        super(options);
+    constructor(public content: string, public outputContent: string | null = null, id?: string) {
+        super(id);
     }
 
     _buildHTML() {
@@ -116,9 +105,9 @@ class InputToOutput extends PageFragment {
         public content: string,
         public inputType: "text" | "number",
         public mapFunction: (input: string) => unknown,
-        options: IdAndClass = {}
+        id?: string
     ) {
-        super(options);
+        super(id);
         this.inputId = InputToOutput._generateId();
         this._onInput = this._onInput.bind(this);
         // _onInput é usado para responder a eventos, que alteram o valor de "this"
@@ -183,9 +172,9 @@ class Question extends PageFragment {
         public answers: string[],
         public correctAnswer: number,
         public explanation: string,
-        options: IdAndClass = {}
+        id?: string
     ) {
-        super(options);
+        super(id);
         this._onClick = this._onClick.bind(this);
     }
 
