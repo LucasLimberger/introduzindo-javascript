@@ -23,14 +23,14 @@ const inicio = [
             new InputToOutput('console.log("@")', "text", v => v),
             new Paragraph("Lembrando que o código na esquerda gera o resultado na direita."),
             new Paragraph('Você pode ter percebido que eu coloquei aspas no exemplo anterior, as aspas são usadas no começo e fim de pedaços de texto.\
-                O console mostra as aspas também, diferente dos números que mostrou anteriormente.\
+                Aqui o console mostra as aspas também, mas em outros lugares pode não mostrar.\
                 Um valor de texto é chamado pelo nome inglês <b><i>"string"</i></b>. Nos códigos daqui eles vão aparecer em laranja.'),
             new Paragraph("São usadas linhas diferentes para cada instrução."),
             new CodeBlock('console.log("girafa")\nconsole.log(-5)', '"girafa"\n-5'),
             new Heading("Comentários"),
             new Paragraph("Duas barras <code>//</code> representam o começo de um comentário, que faz o resto da linha ser ignorada completamente na hora de execução.\
                 Comentários vão ficar em cinza."),
-            new CodeBlock("//Este é um comentário, fino senhor 🗿🍷\n"),
+            new CodeBlock("//Este é um comentário, fino señor 🗿🍷"),
         ],
     },
     {
@@ -81,7 +81,7 @@ const inicio = [
             new Paragraph("Similarmente, algo como <code>numero = numero * 2</code> dobra o valor."),
             new Paragraph("Qualquer lugar que aceita um número também aceita uma operação matemática.\
                 Expressões com mais de uma operação também são possíveis.\
-                Elas usam a mesma ordem do que a matemática: multiplicação e divisão acontecem primeiro, depois soma e subtração."),
+                Elas usam a mesma ordem do que a matemática: multiplicação e divisão primeiro, depois soma e subtração."),
             new CodeBlock("console.log(1 + 3 * 3)", "10"),
             new CodeBlock("console.log((1 + 3) * 3) //parênteses também afetam a ordem", "12"),
             new Paragraph("Por último, o símbolo de mais também combina <i>strings</i>:"),
@@ -184,8 +184,8 @@ const tiposConversoes = [
     {
         subtitle: "Condições",
         contents: [
-            new Paragraph("Por enquanto todo o código aqui foi executado.\
-                Mas às vezes você precisa que um pedaço do código só aconteça às vezes. Introduzindo, <code>if</code>:"),
+            new Paragraph("Por enquanto todo o código aqui foi executado, mas frequentemente, você precisa que um pedaço do código só aconteça às vezes.\
+                Introduzindo, <code>if</code>:"),
             new CodeBlock('if (10 > 5) {\n\tconsole.log("Executei!")\n}', '"Executei!"'),
             new CodeBlock('if (10 < 5) {\n\tconsole.log("Executei!")\n}', ""),
             new Paragraph('O segundo não era para fazer nada mesmo. A palavra <code>if</code> significa "se", em inglês, e usando ela podemos definir código que só é executado às vezes.\
@@ -198,8 +198,8 @@ const tiposConversoes = [
                 Já o símbolo <code>!==</code> é o oposto, checa se os números são diferentes."),
             new CodeBlock("console.log(3 === 3)\nconsole.log(3 !== 3)", "true\nfalse"),
             new Paragraph("Há variações dos símbolos <code>></code> e <code><</code> que também permitem que os números sejam iguais:"),
-            new CodeBlock("console.log(5 >= 4) //maior ou igual\nconsole.log(4 >= 4)", "true\ntrue"),
-            new CodeBlock("console.log(-3 <= -3) //menor ou igual\nconsole.log(5 <= -3)", "true\nfalse"),
+            new CodeBlock("console.log(6 >= 4) //maior ou igual\nconsole.log(4 >= 4)", "true\ntrue"),
+            new CodeBlock("console.log(-5 <= -5) //menor ou igual\nconsole.log(3 <= -5)", "true\nfalse"),
             new Paragraph("<code>===</code> e <code>!==</code> também funcionam com strings:"),
             new CodeBlock('console.log("biscoito" === "bolacha")\nconsole.log("🍪" === "🍪")', "false\ntrue"),
             new Paragraph("O <code>if</code> usa {chaves} para definir um <b>bloco de código</b>.\
@@ -235,6 +235,16 @@ const tiposConversoes = [
                 <code>NaN</code> é um acrônimo para <i>"Not a Number"</i>, que significa "não é um número", em inglês.\
                 Até porque "abacaxi" não é um número.'),
             new CodeBlock('console.log(Number("1️⃣")) //1️⃣ também não é número\nconsole.log(Number("")) //Mas aparentemente nada é', "NaN\n0"),
+            new Paragraph("Outro jeito de converter de número para string é usando <code>.toFixed()</code>:"),
+            new CodeBlock("let numero = 6.54321\nconsole.log(numero.toFixed(3))", '"6.543"'),
+            new Paragraph("Essa é outra daquelas funções que vão atrás do valor.\
+                O número dentro dos parênteses definem quantas casas aparecem depois da vírgula.\
+                Colocar um <code>0</code> aí arredonda o número para inteiro."),
+            new CodeBlock("let inteiro = (9.4).toFixed(0)\n//é necesário () em volta do número para usar .toFixed() diretamente\nconsole.log(inteiro)", '"9"'),
+            new Paragraph("Arredondamento para cima também acontece."),
+            new CodeBlock("console.log((9.6).toFixed(0))\nconsole.log((6.66666).toFixed(4))", '"10"\n"6.6667"'),
+            new Paragraph("E preenche com 0 para ficar do tamanho correto."),
+            new InputToOutput('let realses = @\nconsole.log("R$" + realses.toFixed(2))', "number", v => "R$" + Number(v).toFixed(2)),
         ],
     },
     {
@@ -248,12 +258,36 @@ const tiposConversoes = [
             new CodeBlock("console.log(typeof [])", '"object"'),
             new Paragraph("O tipo de objeto é algo mais abrangente do que só lista.\
                 Apesar de aparecer aqui, falar que são listas ainda é mais específico e adequado.\
-                O nome real é <i>Array</i>, como mencionado antes."),
+                O nome real do tipo lista é <i>Array</i>, como mencionado antes."),
             new Paragraph("Já <code>undefined</code> é o seu próprio tipo:"),
             new CodeBlock("console.log(typeof undefined)", '"undefined"'),
-            new Paragraph("E apesar de <code>NaN</code> não ser um número, ele é um número."),
+            new Paragraph("E apesar de <code>NaN</code> não ser um número, ele é um número:"),
             new CodeBlock("console.log(typeof NaN)", '"number"'),
             new Paragraph("🙃"),
+        ],
+    },
+    {
+        subtitle: "Convertendo listas",
+        contents: [
+            new Heading("De lista para string"),
+            new Paragraph("O jeito principal de converter uma lista para uma string é usando <code>.join()</code>."),
+            new CodeBlock("console.log([4, 8, 15, 16, 23, 42].join())", '"4,8,15,16,23,42"'),
+            new Paragraph("Ele junta os itens da lista e usa vírgulas para separar eles. No lugar das vírgulas, um separador pode ser definido."),
+            new CodeBlock('console.log([1, "1", 1, "1"].join("/"))\nconsole.log([2, 3, 5, 7, 11].join(" - "))', '"1/1/1/1"\n"2 - 3 - 5 - 7 - 11"'),
+            new Paragraph('Uma string vazia <code>""</code> efetivamente junta sem um separador.'),
+            new CodeBlock('console.log([":", "", "/"].join(""))', '":/"'),
+            new Paragraph("A função <code>String()</code> pode ser usada aqui também.\
+                Ela separa os itens por vírgulas, o mesmo que a versão vazia do <code>.join()</code>."),
+            new CodeBlock('console.log(String(["🐍", "🚬"]))', '"🐍,🚬"'),
+            new Heading("De string para lista"),
+            new Paragraph("Para criar uma lista a partir de uma string, usa-se <code>.split()</code>."),
+            new CodeBlock('let string = "Defenestrar-te-ei!"\nconsole.log(string.split("-"))', '["Defenestrar", "te", "ei!"]'),
+            new Paragraph("É o oposto do <code>.join()</code>: divide a string toda vez que encontrar o separador determinado entre os parênteses."),
+            new CodeBlock('console.log("->1->2->3->4".split("->"))', '["", "1", "2", "3", "4"]'),
+            new Paragraph('No próximo exemplo, <code>" "</code> é uma string que contém apenas um espaço.'),
+            new CodeBlock('console.log("Achei que fosse impossível, mas quando fui tentar, descobri que era mesmo.".split(" "))', '["Achei", "que", "fosse", "impossível,", "mas", "quando", "fui", "tentar,", "descobri", "que", "era", "mesmo."]'),
+            new Paragraph("Uma string vazia como separador divide em caracteres individuais."),
+            new InputToOutput('console.log("@".split(""))', "text", v => v.split("")),
         ],
     },
 ];

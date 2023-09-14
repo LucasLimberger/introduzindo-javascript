@@ -131,16 +131,33 @@ class InputToOutput extends PageFragment {
         return element;
     }
     _onInput(event) {
-        const inputValue = this._inputElement.value;
+        let inputValue = this._inputElement.value;
+        if (this.inputType === "number" && inputValue === "") {
+            inputValue = "0";
+        }
         this._codeInsertPoint.innerText = inputValue;
-        let outputValue = this.mapFunction(inputValue);
-        if (outputValue instanceof Array) {
-            outputValue = outputValue.map(item => (typeof item === "string" ? `"${item}"` : item));
+        let outputValue = InputToOutput.repr(this.mapFunction(inputValue));
+        this._outputElement.replaceChildren(createCodeElement(outputValue));
+    }
+    static repr(value, depth = 2) {
+        if (typeof value === "string") {
+            return `"${value}"`;
         }
-        else if (typeof outputValue === "string") {
-            outputValue = `"${outputValue}"`;
+        if (value === null || typeof value !== "object") {
+            return String(value);
         }
-        this._outputElement.replaceChildren(createCodeElement(String(outputValue)));
+        if (value instanceof Array) {
+            if (depth <= 0) {
+                return "[...]";
+            }
+            return "[" + value.map(v => InputToOutput.repr(v, depth - 1)).join(", ") + "]";
+        }
+        const cls = value.constructor === Object ? "" : value.constructor.name + " ";
+        const props = depth <= 0 ? "..." : Object.entries(value).map(entryMap).join(", ");
+        return cls + "{" + props + "}";
+        function entryMap([k, v]) {
+            return k + ": " + InputToOutput.repr(v, depth - 1);
+        }
     }
 }
 InputToOutput._id = 0;

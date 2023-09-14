@@ -150,6 +150,33 @@ function clearNavMenu() {
     navMenuListElement.classList.add("hidden");
 }
 
+function createNavList(topicIndex: number) {
+    return data[topicIndex].pages.map((page, i) => {
+        const li = document.createElement("li");
+        const button = document.createElement("button");
+        button.className = "nav-button";
+        button.innerText = page.subtitle;
+        button.dataset.pageIndex = i.toString();
+        if (page === loadedePage) {
+            button.classList.add("current");
+        }
+
+        if (topicIndex < furthestTopic) {
+            button.classList.add("complete");
+        } else if (topicIndex === furthestTopic) {
+            if (i < furthestPage) {
+                button.classList.add("complete");
+            } else if (i === furthestPage) {
+                button.classList.add(isQuestionDone ? "complete" : "incomplete");
+            } else {
+                button.disabled = true;
+            }
+        }
+        li.append(button);
+        return li;
+    });
+}
+
 function saveToLocalStorage() {
     localStorage.setItem("topic", loadedTopicIndex.toString());
     localStorage.setItem("page", loadedPageIndex.toString());
@@ -166,8 +193,11 @@ function loadFromLocalStorage() {
         localStorage.setItem("furthestTopic", "0");
         localStorage.setItem("furthestPage", "0");
     }
-    furthestTopic = Number(localStorage.getItem("furthestTopic"));
-    furthestPage = Number(localStorage.getItem("furthestPage"));
+    furthestTopic = Math.min(data.length - 1, Number(localStorage.getItem("furthestTopic")));
+    furthestPage = Math.min(
+        data[furthestTopic].pages.length - 1,
+        Number(localStorage.getItem("furthestPage"))
+    );
     isQuestionDone = Boolean(Number(localStorage.getItem("isQuestionDone")));
     loadPage(Number(localStorage.getItem("topic")), Number(localStorage.getItem("page")));
 }
@@ -226,31 +256,4 @@ function loadPage(newTopicIndex: number, newPageIndex: number) {
     saveToLocalStorage();
 
     scrollTo(0, 0);
-}
-
-function createNavList(topicIndex: number) {
-    return data[topicIndex].pages.map((page, i) => {
-        const li = document.createElement("li");
-        const button = document.createElement("button");
-        button.className = "sidebar-button";
-        button.innerText = page.subtitle;
-        button.dataset.pageIndex = i.toString();
-        if (page === loadedePage) {
-            button.classList.add("current");
-        }
-
-        if (topicIndex < furthestTopic) {
-            button.classList.add("complete");
-        } else if (topicIndex === furthestTopic) {
-            if (i < furthestPage) {
-                button.classList.add("complete");
-            } else if (i === furthestPage) {
-                button.classList.add(isQuestionDone ? "complete" : "incomplete");
-            } else {
-                button.disabled = true;
-            }
-        }
-        li.append(button);
-        return li;
-    });
 }
